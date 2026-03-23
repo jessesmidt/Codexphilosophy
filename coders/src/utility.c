@@ -6,7 +6,7 @@
 /*   By: jsmidt <jsmidt@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/03/11 16:41:32 by jsmidt        #+#    #+#                 */
-/*   Updated: 2026/03/16 21:01:52 by jsmidt        ########   odam.nl         */
+/*   Updated: 2026/03/23 13:22:14 by jsmidt        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 long	get_time(void)
 {
 	struct timeval	tv;
-	
+
 	gettimeofday(&tv, NULL);
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
@@ -29,7 +29,7 @@ void	print_state(t_sim *sim, int id, char *msg)
 
 void	single_coder_case(t_coder *coder)
 {
-	usleep(coder->sim->params->time_to_burnout*1000);
+	usleep(coder->sim->params->time_to_burnout * 1000);
 	if (!sim_stopped(coder->sim))
 	{
 		pthread_mutex_lock(&coder->sim->stop_mutex);

@@ -6,7 +6,7 @@
 /*   By: jsmidt <jsmidt@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/03/13 18:02:26 by jsmidt        #+#    #+#                 */
-/*   Updated: 2026/03/16 17:39:22 by jsmidt        ########   odam.nl         */
+/*   Updated: 2026/03/23 13:21:37 by jsmidt        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,10 @@
 
 void	heap_push(t_dongle *dongle, t_waiter waiter)
 {
-	int	i;
-	int	parent;
-	
+	int			i;
+	int			parent;
+	t_waiter	tmp;
+
 	dongle->queue[dongle->queue_size] = waiter;
 	i = dongle->queue_size;
 	dongle->queue_size++;
@@ -29,45 +30,52 @@ void	heap_push(t_dongle *dongle, t_waiter waiter)
 	{
 		parent = (i - 1) / 2;
 		if (dongle->queue[parent].priority <= dongle->queue[i].priority)
-			break;
-		t_waiter tmp = dongle->queue[parent];
+			break ;
+		tmp = dongle->queue[parent];
 		dongle->queue[parent] = dongle->queue[i];
 		dongle->queue[i] = tmp;
 		i = parent;
 	}
 }
 
-void	heap_pop(t_dongle *dongle)
+static void	heap_rebuild(t_dongle *dongle, int i)
 {
-	int	i;
-	int	left;
-	int	right;
-	int	smallest;
-	
-	dongle->queue_size--;
-	dongle->queue[0] = dongle->queue[dongle->queue_size];
-	i = 0;
+	int			left;
+	int			right;
+	int			smallest;
+	t_waiter	tmp;
+
 	while (1)
 	{
 		left = 2 * i + 1;
 		right = 2 * i + 2;
 		smallest = i;
-		if (left < dongle->queue_size &&
-			dongle->queue[left].priority < dongle->queue[smallest].priority)
+		if (left < dongle->queue_size
+			&& dongle->queue[left].priority < dongle->queue[smallest].priority)
 			smallest = left;
-		if (right < dongle->queue_size &&
-			dongle->queue[right].priority < dongle->queue[smallest].priority)
+		if (right < dongle->queue_size
+			&& dongle->queue[right].priority < dongle->queue[smallest].priority)
 			smallest = right;
 		if (smallest == i)
-			break;
-		t_waiter tmp = dongle->queue[smallest];
+			return ;
+		tmp = dongle->queue[smallest];
 		dongle->queue[smallest] = dongle->queue[i];
 		dongle->queue[i] = tmp;
 		i = smallest;
 	}
 }
 
-void heap_remove(t_dongle *dongle, pthread_cond_t *cond)
+void	heap_pop(t_dongle *dongle)
+{
+	int	i;
+
+	dongle->queue_size--;
+	dongle->queue[0] = dongle->queue[dongle->queue_size];
+	i = 0;
+	heap_rebuild(dongle, i);
+}
+
+void	heap_remove(t_dongle *dongle, pthread_cond_t *cond)
 {
 	int	i;
 
@@ -78,26 +86,8 @@ void heap_remove(t_dongle *dongle, pthread_cond_t *cond)
 		{
 			dongle->queue_size--;
 			dongle->queue[i] = dongle->queue[dongle->queue_size];
-			int	left;
-			int	right;
-			int	smallest;
-			while (1)
-			{
-				left = 2 * i + 1;
-				right = 2 * i + 2;
-				smallest = i;
-				if (left < dongle->queue_size &&
-					dongle->queue[left].priority < dongle->queue[smallest].priority)
-					smallest = right;
-				if (smallest == i)
-					break;
-				t_waiter	tmp;
-				tmp = dongle->queue[smallest];
-				dongle->queue[smallest] = dongle->queue[i];
-				dongle->queue[i] = tmp;
-				i = smallest;
-			}
-			return ; 
+			heap_rebuild(dongle, i);
+			return ;
 		}
 		i++ ;
 	}

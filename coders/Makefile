@@ -6,7 +6,7 @@
 #    By: jsmidt <jsmidt@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2026/03/03 20:50:46 by jsmidt        #+#    #+#                  #
-#    Updated: 2026/03/16 21:36:05 by jsmidt        ########   odam.nl          #
+#    Updated: 2026/03/20 17:15:33 by jsmidt        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,16 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 run:		
-			./$(NAME) 1 1200 200 200 200 5 100 edf
+			./$(NAME) 4 2000 200 200 200 5 100 fifo
+			
+run_edf:		
+			./$(NAME) 4 2000 200 200 200 5 100 edf
+
+run_burnout:		
+			./$(NAME) 4 500 200 200 200 5 100 fifo
+
+run_single:		
+			./$(NAME) 1 800 200 200 200 5 100 fifo
 
 test:		
 			make

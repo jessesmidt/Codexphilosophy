@@ -6,7 +6,7 @@
 /*   By: jsmidt <jsmidt@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/03/10 19:00:46 by jsmidt        #+#    #+#                 */
-/*   Updated: 2026/03/16 14:34:26 by jsmidt        ########   odam.nl         */
+/*   Updated: 2026/03/23 13:23:11 by jsmidt        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ int	init_dongles(t_sim *sim)
 		sim->dongles[i].available_at = 0;
 		sim->dongles[i].queue_size = 0;
 		sim->dongles[i].queue_cap = sim->params->num_coders;
-		sim->dongles[i].queue = malloc(sizeof(t_waiter) * sim->params->num_coders);
+		sim->dongles[i].queue = malloc(sizeof(t_waiter)
+				* sim->params->num_coders);
 		if (!sim->dongles[i].queue)
 			return (1);
 		pthread_mutex_init(&sim->dongles[i].mutex, NULL);
@@ -58,7 +59,7 @@ int	init_coders(t_sim *sim)
 		sim->coders[i].compile_count = 0;
 		sim->coders[i].last_compile_start = 0;
 		sim->coders[i].sim = sim;
-		sim->coders[i].last_compile_start = get_time();
+		sim->coders[i].last_compile_start = sim->start_time - (i * 10);
 		pthread_cond_init(&sim->coders[i].wait_cond, NULL);
 		if (i == sim->params->num_coders -1)
 		{

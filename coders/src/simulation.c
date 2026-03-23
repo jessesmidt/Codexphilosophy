@@ -6,7 +6,7 @@
 /*   By: jsmidt <jsmidt@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/03/13 15:07:09 by jsmidt        #+#    #+#                 */
-/*   Updated: 2026/03/16 15:06:01 by jsmidt        ########   odam.nl         */
+/*   Updated: 2026/03/23 13:21:49 by jsmidt        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	run_simulation(t_sim *sim)
 {
 	pthread_t	monitor;
 	int			i;
-	
+
 	sim->start_time = get_time();
 	i = 0;
 	while (i < sim->params->num_coders)
@@ -30,17 +30,14 @@ void	run_simulation(t_sim *sim)
 	pthread_create(&monitor, NULL, monitor_routine, sim);
 	i = 0;
 	while (i < sim->params->num_coders)
-	{
-		pthread_join(sim->threads[i], NULL);
-		i++;
-	}
+		pthread_join(sim->threads[i++], NULL);
 	pthread_join(monitor, NULL);
 }
 
 int	sim_stopped(t_sim *sim)
 {
-	int stop;
-	
+	int	stop;
+
 	pthread_mutex_lock(&sim->stop_mutex);
 	stop = sim->stop;
 	pthread_mutex_unlock(&sim->stop_mutex);

@@ -1,0 +1,61 @@
+*This project has been created as part of the 42 curriculum by jsmidt.*
+
+---
+
+## Description
+
+Codexion is a variation of the classic Dining Philosophers problem, reframed around software development. N coders sit in a circle around a shared Quantum Compiler. Each coder needs two USB dongles simultaneously to compile — their left and their right neighbor's. There are exactly N dongles on the table.
+
+Each coder loops through: grabbing both dongles → compiling → releasing dongles → debugging → refactoring. If a coder goes too long without compiling, they burn out and the simulation ends. The challenge is coordinating access to shared dongles without deadlock, starvation, or race conditions.
+
+---
+
+## Instructions
+```bash
+make
+./codexion [num_coders] [time_to_burnout] [time_to_compile] [time_to_debug] [time_to_refactor] [num_compiles_required] [dongle_cooldown] [fifo|edf]
+```
+
+**Example runs:**
+```bash
+./codexion 4 1204 200 200 200 5 100 fifo
+./codexion 20 9500 550 2200 125 25 300 edf
+./codexion 1 800 200 200 200 5 100 fifo   # single coder edge case
+```
+
+All times are in milliseconds. `dongle_cooldown` is how long a dongle stays locked after being released. The scheduler is either `fifo` (first come first served) or `edf` (earliest deadline first).
+
+---
+
+## Blocking Cases Handled
+
+**Deadlock prevention** — all four of Coffman's conditions are addressed. Circular wait is broken by making the last coder pick up their right dongle before their left, ensuring no circular dependency can form among all N coders simultaneously.
+
+**Starvation prevention** — a priority queue (min-heap) inside each dongle manages waiting coders. Under FIFO, priority is request timestamp. Under EDF, priority is the coder's next burnout deadline. This guarantees the most urgent or longest-waiting coder always gets served first.
+
+**Cooldown handling** — after a dongle is released it enters a cooldown period (`dongle_cooldown` ms) before any coder can grab it again. Waiting coders use `pthread_cond_timedwait` to sleep exactly until the cooldown expires, avoiding busy-waiting.
+
+**Precise burnout detection** — a dedicated monitor thread checks all coders every 1ms and logs burnout within 10ms of the actual event, as required.
+
+**Log serialization** — all output goes through a single `print_mutex`, ensuring log lines never interleave across threads.
+
+---
+
+## Thread Synchronization Mechanisms
+
+**`pthread_mutex_t`** — each dongle has its own mutex protecting its state (availability, cooldown timestamp, waiting queue). A separate `stop_mutex` protects the simulation stop flag. A `print_mutex` serializes all terminal output.
+
+**`pthread_cond_t`** — each coder has a personal condition variable (`wait_cond`). When a dongle is unavailable, the coder adds itself to the dongle's priority queue and sleeps on its own condvar. When the dongle is released, only the highest-priority waiter is signaled — avoiding thundering herd. The check-and-sleep is atomic (held inside the dongle's mutex) preventing missed wakeups.
+
+**Race condition prevention** — the stop flag is always read and written inside `stop_mutex`. Burnout is printed and the flag is set atomically to prevent duplicate burnout messages from the monitor and coder threads racing.
+
+---
+
+## Resources
+
+- [EDF Scheduling Algorithm — GeeksForGeeks](https://www.geeksforgeeks.org/operating-systems/earliest-deadline-first-edf-cpu-scheduling-algorithm/)
+- [Heap Data Structure — Programiz](https://www.programiz.com/dsa/heap-data-structure)
+- [POSIX Threads Programming — CMU](https://www.cs.cmu.edu/afs/cs/academic/class/15492-f07/www/pthreads.html)
+- [Deadlock — Yale](https://www.cs.yale.edu/homes/aspnes/pinewiki/Deadlock.html)
+
+**AI usage:** Claude (Anthropic) was used throughout this project as a learning and debugging aid — explaining threading primitives (mutexes, condvars, pthreads), discussing concurrency concepts (deadlock, starvation, Coffman's conditions), helping structure data types and init/cleanup functions, identifying bugs during development, and writing this documentation. All code was written and understood by the student.

@@ -6,7 +6,7 @@
 /*   By: jsmidt <jsmidt@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/03/10 16:45:40 by jsmidt        #+#    #+#                 */
-/*   Updated: 2026/03/16 20:44:17 by jsmidt        ########   odam.nl         */
+/*   Updated: 2026/03/23 13:34:13 by jsmidt        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 static int	int_err(int a, char **av)
 {
 	fprintf(stderr,
-		"Error: argument '%s'"
-		"is not a valid / positive int", av[a]
+		"Error: argument '%s' "
+		"is not a valid / positive int\n", av[a]
 		);
 	return (-1);
 }
@@ -40,7 +40,7 @@ static int	find_schedule(char **av, t_params *params)
 		params->scheduler = 1;
 	else
 	{
-		printf("Error: schedule must be either 'fifo' or 'edf'");
+		printf("Error: schedule must be either 'fifo' or 'edf\n");
 		return (-1);
 	}
 	if (params->num_coders < 1)

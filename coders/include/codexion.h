@@ -6,7 +6,7 @@
 /*   By: jsmidt <jsmidt@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/03/10 16:09:46 by jsmidt        #+#    #+#                 */
-/*   Updated: 2026/03/16 21:14:42 by jsmidt        ########   odam.nl         */
+/*   Updated: 2026/03/23 12:23:54 by jsmidt        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,15 +77,14 @@ typedef struct s_waiter
 	pthread_cond_t	*cond;
 }	t_waiter;
 
-
 // main
 
 int			init_main(t_sim *sim, t_params *params);
-void		take_dongle(t_coder *coder, t_dongle *dongle);
+int			take_dongle(t_coder *coder, t_dongle *dongle);
 void		release_dongle(t_coder *coder, t_dongle *dongle);
 void		*coder_routine(void *arg);
 void		run_simulation(t_sim *sim);
-void 		*monitor_routine(void *arg);
+void		*monitor_routine(void *arg);
 void		wake_all_coders(t_sim *sim);
 
 // heap
