@@ -18,6 +18,7 @@ make
 
 **Example runs:**
 ```bash
+./codexion 2 800 200 200 200 3 100 edf
 ./codexion 4 1204 200 200 200 5 100 fifo
 ./codexion 20 9500 550 2200 125 25 300 edf
 ./codexion 1 800 200 200 200 5 100 fifo   # single coder edge case
@@ -58,4 +59,4 @@ All times are in milliseconds. `dongle_cooldown` is how long a dongle stays lock
 - [POSIX Threads Programming — CMU](https://www.cs.cmu.edu/afs/cs/academic/class/15492-f07/www/pthreads.html)
 - [Deadlock — Yale](https://www.cs.yale.edu/homes/aspnes/pinewiki/Deadlock.html)
 
-**AI usage:** Claude (Anthropic) was used throughout this project as a learning and debugging aid — explaining threading primitives (mutexes, condvars, pthreads), discussing concurrency concepts (deadlock, starvation, Coffman's conditions), helping structure data types and init/cleanup functions, identifying bugs during development, and writing this documentation. All code was written and understood by the student.
+**AI usage:** Claude (Anthropic) was used throughout this project as a learning and debugging aid — explaining threading primitives (mutexes, condvars, pthreads), discussing concurrency concepts (deadlock, starvation, Coffman's conditions), helping structure data types and init/cleanup functions, identifying bugs during development, and writing this documentation. All code was hand-written and understood.

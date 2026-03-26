@@ -6,7 +6,7 @@
 /*   By: jsmidt <jsmidt@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/03/03 20:52:50 by jsmidt        #+#    #+#                 */
-/*   Updated: 2026/03/23 13:44:12 by jsmidt        ########   odam.nl         */
+/*   Updated: 2026/03/24 13:54:11 by jsmidt        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ int	take_dongle(t_coder *coder, t_dongle *dongle)
 	else
 		waiter.priority = coder->last_compile_start
 			+ coder->sim->params->time_to_burnout;
+	waiter.coder_id = coder->id;
 	heap_push(dongle, waiter);
 	wait_for_dongle(coder, dongle);
 	heap_pop(dongle);

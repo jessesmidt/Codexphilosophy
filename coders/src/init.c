@@ -6,7 +6,7 @@
 /*   By: jsmidt <jsmidt@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/03/10 19:00:46 by jsmidt        #+#    #+#                 */
-/*   Updated: 2026/03/23 13:23:11 by jsmidt        ########   odam.nl         */
+/*   Updated: 2026/03/23 17:49:14 by jsmidt        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@ int	init_sim(t_sim *sim, t_params *params)
 {
 	sim->params = params;
 	sim->stop = 0;
+	sim->dongles = NULL;
+	sim->coders = NULL;
+	sim->threads = NULL;
 	pthread_mutex_init(&sim->stop_mutex, NULL);
 	pthread_mutex_init(&sim->print_mutex, NULL);
 	sim->dongles = malloc(sizeof(t_dongle) * params->num_coders);

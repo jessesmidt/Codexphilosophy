@@ -6,7 +6,7 @@
 /*   By: jsmidt <jsmidt@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/03/10 16:09:46 by jsmidt        #+#    #+#                 */
-/*   Updated: 2026/03/23 12:23:54 by jsmidt        ########   odam.nl         */
+/*   Updated: 2026/03/23 18:22:15 by jsmidt        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ void		wake_all_coders(t_sim *sim);
 void		heap_push(t_dongle *dongle, t_waiter waiter);
 void		heap_pop(t_dongle *dongle);
 void		heap_remove(t_dongle *dongle, pthread_cond_t *cond);
-t_waiter	heap_peek(t_dongle *dongle);
 
 // util
 

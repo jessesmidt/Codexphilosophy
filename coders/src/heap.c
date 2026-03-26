@@ -6,7 +6,7 @@
 /*   By: jsmidt <jsmidt@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/03/13 18:02:26 by jsmidt        #+#    #+#                 */
-/*   Updated: 2026/03/23 13:21:37 by jsmidt        ########   odam.nl         */
+/*   Updated: 2026/03/24 16:43:34 by jsmidt        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,11 @@ void	heap_pop(t_dongle *dongle)
 {
 	int	i;
 
+	if (dongle->queue_size <= 0)
+		return ;
 	dongle->queue_size--;
-	dongle->queue[0] = dongle->queue[dongle->queue_size];
+	if (dongle->queue_size > 0)
+		dongle->queue[0] = dongle->queue[dongle->queue_size];
 	i = 0;
 	heap_rebuild(dongle, i);
 }
@@ -93,7 +96,4 @@ void	heap_remove(t_dongle *dongle, pthread_cond_t *cond)
 	}
 }
 
-t_waiter	heap_peek(t_dongle *dongle)
-{
-	return (dongle->queue[0]);
-}
+
